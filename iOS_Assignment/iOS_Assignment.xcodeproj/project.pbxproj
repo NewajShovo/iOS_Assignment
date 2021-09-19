@@ -19,6 +19,10 @@
 		A089849F26F7BBB100A96ACD /* CustomImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A089849D26F7BBB100A96ACD /* CustomImageView.swift */; };
 		A08984A426F7BC0900A96ACD /* DataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08984A326F7BC0900A96ACD /* DataModel.swift */; };
 		A08984AC26F7C10E00A96ACD /* APILoaderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08984AB26F7C10E00A96ACD /* APILoaderViewController.swift */; };
+		A08984BF26F7CA1A00A96ACD /* CustomSpinnerCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = A08984BD26F7CA1A00A96ACD /* CustomSpinnerCell.xib */; };
+		A08984C026F7CA1A00A96ACD /* CustomSpinnerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08984BE26F7CA1A00A96ACD /* CustomSpinnerCell.swift */; };
+		A08984C726F7CA3500A96ACD /* ImageInsertionCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08984C526F7CA3500A96ACD /* ImageInsertionCollectionViewCell.swift */; };
+		A08984C826F7CA3500A96ACD /* ImageInsertionCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = A08984C626F7CA3500A96ACD /* ImageInsertionCollectionViewCell.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -57,6 +61,10 @@
 		A089849D26F7BBB100A96ACD /* CustomImageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomImageView.swift; sourceTree = "<group>"; };
 		A08984A326F7BC0900A96ACD /* DataModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataModel.swift; sourceTree = "<group>"; };
 		A08984AB26F7C10E00A96ACD /* APILoaderViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APILoaderViewController.swift; sourceTree = "<group>"; };
+		A08984BD26F7CA1A00A96ACD /* CustomSpinnerCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CustomSpinnerCell.xib; sourceTree = "<group>"; };
+		A08984BE26F7CA1A00A96ACD /* CustomSpinnerCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomSpinnerCell.swift; sourceTree = "<group>"; };
+		A08984C526F7CA3500A96ACD /* ImageInsertionCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageInsertionCollectionViewCell.swift; sourceTree = "<group>"; };
+		A08984C626F7CA3500A96ACD /* ImageInsertionCollectionViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ImageInsertionCollectionViewCell.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -158,6 +166,8 @@
 			isa = PBXGroup;
 			children = (
 				A089848B26F7BA9600A96ACD /* CustomCollectionViewCell */,
+				A08984BC26F7CA1A00A96ACD /* CustomSpinnerCell */,
+				A08984C426F7CA3500A96ACD /* ImageInsertionCollectionViewCell */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -178,6 +188,24 @@
 				A089849D26F7BBB100A96ACD /* CustomImageView.swift */,
 			);
 			path = HelperClass;
+			sourceTree = "<group>";
+		};
+		A08984BC26F7CA1A00A96ACD /* CustomSpinnerCell */ = {
+			isa = PBXGroup;
+			children = (
+				A08984BD26F7CA1A00A96ACD /* CustomSpinnerCell.xib */,
+				A08984BE26F7CA1A00A96ACD /* CustomSpinnerCell.swift */,
+			);
+			path = CustomSpinnerCell;
+			sourceTree = "<group>";
+		};
+		A08984C426F7CA3500A96ACD /* ImageInsertionCollectionViewCell */ = {
+			isa = PBXGroup;
+			children = (
+				A08984C526F7CA3500A96ACD /* ImageInsertionCollectionViewCell.swift */,
+				A08984C626F7CA3500A96ACD /* ImageInsertionCollectionViewCell.xib */,
+			);
+			path = ImageInsertionCollectionViewCell;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -283,6 +311,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A08984C826F7CA3500A96ACD /* ImageInsertionCollectionViewCell.xib in Resources */,
+				A08984BF26F7CA1A00A96ACD /* CustomSpinnerCell.xib in Resources */,
 				A089845B26F7B86800A96ACD /* LaunchScreen.storyboard in Resources */,
 				A089845826F7B86800A96ACD /* Assets.xcassets in Resources */,
 				A089845626F7B86200A96ACD /* Main.storyboard in Resources */,
@@ -314,8 +344,10 @@
 				A089848E26F7BA9600A96ACD /* CustomCollectionViewCell.swift in Sources */,
 				A089849E26F7BBB100A96ACD /* HelperClass.swift in Sources */,
 				A089844F26F7B86200A96ACD /* AppDelegate.swift in Sources */,
+				A08984C026F7CA1A00A96ACD /* CustomSpinnerCell.swift in Sources */,
 				A089849F26F7BBB100A96ACD /* CustomImageView.swift in Sources */,
 				A08984AC26F7C10E00A96ACD /* APILoaderViewController.swift in Sources */,
+				A08984C726F7CA3500A96ACD /* ImageInsertionCollectionViewCell.swift in Sources */,
 				A08984A426F7BC0900A96ACD /* DataModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
