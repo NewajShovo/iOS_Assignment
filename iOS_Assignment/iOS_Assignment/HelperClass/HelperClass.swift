@@ -6,7 +6,9 @@
 //
 
 import Foundation
+
 let API = "https://api.500px.com/v1/photos?feature=popular&"
+
 func getImageFromRestAPI(pageNo:String, completionClosure: @escaping (APIElementList)-> ()){
     let config = URLSessionConfiguration.default;
     let session = URLSession(configuration: config)
