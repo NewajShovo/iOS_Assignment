@@ -8,7 +8,7 @@
 import UIKit
 let SCREEN_WIDTH:CGFloat = UIScreen.main.bounds.width
 let RATIO:CGFloat = UIScreen.main.bounds.width/414.0
-var API_PAGE_NO = "page=1"
+var API_PAGE_NO : Int = 1
 
 class APILoaderViewController: UIViewController,UICollectionViewDelegateFlowLayout, UICollectionViewDelegate, UICollectionViewDataSource {
     @IBOutlet weak var topView: UIView!
@@ -20,10 +20,10 @@ class APILoaderViewController: UIViewController,UICollectionViewDelegateFlowLayo
     var fetchingMore = false
     override func viewDidLoad() {
         super.viewDidLoad()
-        getImageFromRestAPI(pageNo:API_PAGE_NO) { (APIElementList) in
-            self.presentAPIElement = APIElementList
-            self.previousPage = self.presentAPIElement.current_page
-            self.photoInfoStore.append(contentsOf: APIElementList.photos)
+        getImageFromRestAPI(pageNo:API_PAGE_NO) { elementList in
+            self.presentAPIElement = elementList
+            self.previousPage = elementList.current_page
+            self.photoInfoStore.append(contentsOf: self.presentAPIElement.photos)
             DispatchQueue.main.async{
                 self.setCollectionView();
                 self.registerCustomCollectionViewCell();
@@ -55,13 +55,25 @@ class APILoaderViewController: UIViewController,UICollectionViewDelegateFlowLayo
         photoViewerCollectionView.dataSource = self;
     }
     
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        return 2
+    }
+    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return self.photoInfoStore.count
+        if (section == 0) {
+            return self.photoInfoStore.count + (self.photoInfoStore.count/4);
+        }
+        else if (section == 1 && fetchingMore) {
+            return 1
+        }
+        else {
+            return 0
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize{
         var indexValue = indexPath.row
-        if ((indexValue + 1) % 5 == 0){
+        if ((indexValue + 1) % 5 == 0) || (indexPath.section == 1)  {
             let requiredHeight = 50 * RATIO
             return CGSize(width: Int(SCREEN_WIDTH), height: Int(requiredHeight));
         }
@@ -77,7 +89,6 @@ class APILoaderViewController: UIViewController,UICollectionViewDelegateFlowLayo
             let size = CGSize(width: Int(width), height: height);
             let font = UIFont.systemFont(ofSize: 12, weight: .regular)
             let attributes = [NSAttributedString.Key.font: font]
-            
             let estimatedFrame = NSString(string: descriptionText).boundingRect(with: size, options:.usesLineFragmentOrigin , attributes: attributes, context: nil)
             let heightAboveDescriptionLabel = 41.0;
             let additionalHeightAfterText = 12.0
@@ -90,21 +101,56 @@ class APILoaderViewController: UIViewController,UICollectionViewDelegateFlowLayo
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         var indexValue = indexPath.row
-        if (indexValue + 1) % 5 == 0  {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ImageInsertionCollectionViewCell", for: indexPath) as! ImageInsertionCollectionViewCell;
-            return cell
+        if (indexPath.section==0){
+            if (indexValue + 1) % 5 == 0  {
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ImageInsertionCollectionViewCell", for: indexPath) as! ImageInsertionCollectionViewCell;
+                return cell
+            }
+            else{
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CustomCollectionViewCell", for: indexPath) as! CustomCollectionViewCell;
+                let totalImageInsertionCount = indexPath.row/5
+                indexValue = indexValue - totalImageInsertionCount
+                let stringValue = self.photoInfoStore[indexValue].image_url[0];
+                let urlString = URL(string: stringValue)
+                cell.imageView.loadImage(from: urlString!)
+                cell.titleLabel.text = self.photoInfoStore[indexValue].name;
+                cell.voteCountLabel.text = numberFormat(from: self.photoInfoStore[indexValue].votes_count)
+                cell.descriptionLabel.text = self.photoInfoStore[indexValue].description;
+                return cell;
+            }
         }
         else{
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CustomCollectionViewCell", for: indexPath) as! CustomCollectionViewCell;
-            let totalImageInsertionCount = indexPath.row/5
-            indexValue = indexValue - totalImageInsertionCount
-            let stringValue = self.photoInfoStore[indexValue].image_url[0];
-            let urlString = URL(string: stringValue)
-            cell.imageView.loadImage(from: urlString!)
-            cell.titleLabel.text = self.photoInfoStore[indexValue].name;
-            cell.voteCountLabel.text = numberFormat(from: self.photoInfoStore[indexValue].votes_count)
-            cell.descriptionLabel.text = self.photoInfoStore[indexValue].description;
-            return cell;
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CustomSpinnerCell", for: indexPath) as! CustomSpinnerCell;
+            cell.activityLoader.startAnimating()
+            return cell
+        }
+    }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let offsetY = scrollView.contentOffset.y
+        let contentHeight = scrollView.contentSize.height
+        if offsetY > contentHeight - scrollView.frame.height{
+            if !fetchingMore{
+                let nextPage = self.presentAPIElement.current_page + 1
+                API_PAGE_NO = nextPage
+                fetchMoreDataFromAPI()
+            }
+        }
+    }
+
+    func fetchMoreDataFromAPI(){
+        fetchingMore = true
+        photoViewerCollectionView.reloadSections(IndexSet(integer: 1))
+        getImageFromRestAPI(pageNo: API_PAGE_NO) { elementList in
+            self.presentAPIElement = elementList
+            if self.previousPage != self.presentAPIElement.current_page{
+                self.photoInfoStore.append(contentsOf: self.presentAPIElement.photos)
+                self.previousPage = self.presentAPIElement.current_page
+            }
+            DispatchQueue.main.async{
+                self.fetchingMore = false
+                self.photoViewerCollectionView.reloadData();
+            }
         }
     }
 }
