@@ -7,23 +7,21 @@
 
 import Foundation
 
-let API = "https://api.500px.com/v1/photos?feature=popular&"
+func getImageFromRestAPI(pageNo:Int, completionClosure: @escaping (APIElementList)-> ()){
+    guard let urlName = URL(string: "https://api.500px.com/v1/photos?feature=popular&page=\(pageNo)") else {
+        return
+    }
+    let urlRequest = URLRequest(url: urlName as URL)
 
-func getImageFromRestAPI(pageNo:String, completionClosure: @escaping (APIElementList)-> ()){
-    let config = URLSessionConfiguration.default;
-    let session = URLSession(configuration: config)
-    let currentAPI = API + pageNo
-    let url = NSURL(string: currentAPI)
-    let task = session.dataTask(with: url! as URL, completionHandler: {data, response, error in
-        
+    let task = URLSession.shared.dataTask(with: urlRequest) {(data, response, error) in
+         
         if let err = error {
             print("Error: \(err)")
             return
         }
-        
         let user = try?JSONDecoder().decode(APIElementList.self, from: data!)
         completionClosure(user!)
-    })
+    }
     task.resume()
 }
 
